@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 
 export default function Home() {
-    const [tabuleiro, setTabuleiro] = useState(Array(9).fill(null));
-    const [turnoX, setTurnoX] = useState<boolean>(true)
+    const [tabuleiro, setTabuleiro] = useState(Array(9).fill(null))//cria lista com 9 campos nulos
     const [vezDoJogador, setVezDoJogador] = useState<boolean>(true)
     const [isJogadorX, setIsJogadorX] = useState<boolean>(true)
 
     const MicheleIA = () => {//inteligencia que joga contra o player
-        const novoTabuleiro = [...tabuleiro];
+        const novoTabuleiro = [...tabuleiro]
 
         //1. verifica se pode ganhar o jogo com uma jogada. Se sim, ela faz essa jogada.
-        const jogadapraganhar = encontrarJogadaParaGanhar(novoTabuleiro, (isJogadorX ? 'O' : 'X'));
+        const jogadapraganhar = encontrarJogadaParaGanhar(novoTabuleiro, (isJogadorX ? 'O' : 'X'))
         if (jogadapraganhar !== null) {
             console.log('jogada para ganhar', jogadapraganhar)
             setTimeout(() => {
@@ -21,7 +20,7 @@ export default function Home() {
         }
 
         // 2. Bloquear o jogador
-        const jogadaParaBloquear = encontrarJogadaParaGanhar(novoTabuleiro, (!isJogadorX ? 'O' : 'X'));
+        const jogadaParaBloquear = encontrarJogadaParaGanhar(novoTabuleiro, (!isJogadorX ? 'O' : 'X'))
         if (jogadaParaBloquear !== null) {
             console.log('jogada para bloquear', jogadaParaBloquear)
             setTimeout(() => {
@@ -45,8 +44,8 @@ export default function Home() {
 
     const encontrarJogadaEstrategica = (quadrados: Array<string | null>) => {
         const jogadasPreferidas = [4, 0, 2, 6, 8, 1, 3, 5, 7]; // Preferência: Centro, Cantos, Laterais
-        return jogadasPreferidas.find((index) => quadrados[index] === null) ?? null;
-    };
+        return jogadasPreferidas.find((index) => quadrados[index] === null) ?? null //retorna o melhor campo nulo que estiver disponivel
+    }
 
     const encontrarJogadaParaGanhar = (quadrados: Array<string | null>, jogador: string) => {
         // Lista de todas as combinações que formam uma linha, coluna ou diagonal
@@ -63,23 +62,22 @@ export default function Home() {
 
         // Percorre cada linha para ver se há uma jogada que pode ganhar o jogo
         for (let i = 0; i < linhas.length; i++) {
-            const [a, b, c] = linhas[i];
+            const [a, b, c] = linhas[i]
 
             // Verifica se dois dos três quadrados são do jogador e o terceiro está vazio
-            if (quadrados[a] === jogador && quadrados[b] === jogador && quadrados[c] === null) return c;
-            if (quadrados[a] === jogador && quadrados[c] === jogador && quadrados[b] === null) return b;
-            if (quadrados[b] === jogador && quadrados[c] === jogador && quadrados[a] === null) return a;
+            if (quadrados[a] === jogador && quadrados[b] === jogador && quadrados[c] === null) return c
+            if (quadrados[a] === jogador && quadrados[c] === jogador && quadrados[b] === null) return b
+            if (quadrados[b] === jogador && quadrados[c] === jogador && quadrados[a] === null) return a
         }
 
         // Se não houver nenhuma jogada vencedora, retorna null
-        return null;
-    };
+        return null
+    }
 
 
     useEffect(() => {
         if (!vezDoJogador) {
             MicheleIA()
-            console.log('alo')
         }
         setTimeout(() => {
             verificaGanhador()
@@ -87,10 +85,7 @@ export default function Home() {
     }, [tabuleiro])
 
     useEffect(() => {
-        if (isJogadorX) {
-            setTurnoX(true)
-        } else {
-            setTurnoX(false)
+        if (!isJogadorX) {
             MicheleIA()
         }
     }, [isJogadorX])
@@ -180,8 +175,6 @@ export default function Home() {
                     }
                 </div>
                 <button onClick={() => {
-                    // setJogoComecou(false)
-                    setTurnoX(true)
                     setTabuleiro(Array(9).fill(null))
 
                     if (isJogadorX) {
